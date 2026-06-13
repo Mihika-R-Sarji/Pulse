@@ -22,9 +22,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run Pulse Bot
-        env:
+       - name: Run Pulse Bot
+       env:
           WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
         run: python bot.py
 
       - name: Upload summary as artifact
