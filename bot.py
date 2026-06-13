@@ -1,5 +1,8 @@
 import requests
+import os
 from datetime import date
+
+api_key = os.environ.get("WEATHER_API_KEY")
 
 def get_weather(city="Thiruvananthapuram"):
     url = f"https://wttr.in/{city}?format=3"
