@@ -1,6 +1,8 @@
 import requests
+import smtp
 import os
 from datetime import date
+from email.mime.text import MIMEText
 
 api_key = os.environ.get("WEATHER_API_KEY")
 
@@ -35,6 +37,17 @@ def get_fact():
     except Exception as e:
         return f"Fact unavailable ({e})"
 
+def send_email(summary_text):
+    sender=os.environ.get("EMAIL_ADDRESS")
+    password=os.environ.get("EMAIL_APP_PASSWORD")
+    receiver=os.environ.get("RECIPIENT_EMAIL")
+
+    msg=MIMEText(summary_text)
+
+    msg["Subject"] = "Pulse Daily Summary"
+    msg["From"] = sender
+    msg["To"] = receiver
+
 def build_summary():
     today = date.today().strftime("%A, %d %B %Y")
     weather = get_weather()
@@ -68,6 +81,12 @@ def run():
         f.write(summary)
 
     print("Pulse ran successfully")
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+        server.login(sender, password)
+        server.sendmessage(msg)
+
+    print("Email sent")
 
 if __name__ == "__main__":
     run()
