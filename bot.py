@@ -22,10 +22,21 @@ def get_quote():
     except Exception as e:
         return f"Quote unavailable ({e})"
 
+def get_fact():
+    url = "https://uselessfacts.jsph.pl/api/v2/facts/random"
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        return data["text"]
+    except Exception as e:
+        return f"Fact unavailable ({e})"
+
 def build_summary():
     today = date.today().strftime("%A, %d %B %Y")
     weather = get_weather()
     quote = get_quote()
+    fact=get_fact()
 
     summary = f"""
 ========================================================
@@ -38,6 +49,9 @@ WEATHER
 
 QUOTE
 {quote}
+
+Fact
+{fact}
 
 ========================================================
 """
